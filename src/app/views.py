@@ -98,9 +98,9 @@ class ProductMixinView(generics.GenericAPIView,
             content="Vide"
         serializer.save(content=content)
 """
-from rest_framework import viewsets
+from rest_framework import viewsets,mixins
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.UpdateModelMixin):
     """
     get -> list->Queryset
     get-> retrieve
