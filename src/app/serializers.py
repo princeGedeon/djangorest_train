@@ -7,9 +7,16 @@ class ProductSerializer(serializers.ModelSerializer):
 
     url=serializers.HyperlinkedIdentityField(view_name="detail",lookup_field="pk")
     email=serializers.EmailField(write_only=True)
+    name=serializers.CharField()
     class Meta:
         model=Product
         fields=['id',"name","content","price","discount","url","email"]
+
+    def validate_name(self,value):
+        qs=Product.objects.filter(name__iexact=value)
+        if qs.exists():
+            raise serializers.ValidationError("Ce champs existe déja")
+        return value
 
     def create(self, validated_data):
         email=validated_data.pop('email')
