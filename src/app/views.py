@@ -17,7 +17,7 @@ from app.permissions import IsStaffPermission
 
 from app.permissions_mixins import EditorUserPermissionsMixin
 
-
+""" 
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -97,6 +97,18 @@ class ProductMixinView(generics.GenericAPIView,
         if content is None:
             content="Vide"
         serializer.save(content=content)
+"""
+from rest_framework import viewsets
+
+class ProductViewSet(viewsets.ModelViewSet):
+    """
+    get -> list->Queryset
+    get-> retrieve
+
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
 
 
 
