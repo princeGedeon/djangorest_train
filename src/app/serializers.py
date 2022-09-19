@@ -10,3 +10,9 @@ class ProductSerializer(serializers.ModelSerializer):
         fields=['id',"name","content","price","discount","dsc"]
     def get_dsc(self,obj):
         return obj.discount
+
+class CreateProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Product
+        fields=["name","content","price"]

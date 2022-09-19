@@ -8,22 +8,50 @@ from rest_framework.response import Response
 
 from app.models import Product
 
-from app.serializers import ProductSerializer
+from app.serializers import ProductSerializer,CreateProductSerializer
+
+from rest_framework import generics
+
+class DetailApiView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class CreateApiView(generics.CreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = CreateProductSerializer
+
+    def perform_create(self, serializer):
+
+        content="C'est vide"
+
+        serializer.save(content=content)
+
+class ListProduct(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class ListCreateApiView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = CreateProductSerializer
+
+    def perform_create(self, serializer):
+
+        content="C'est vide"
+
+        serializer.save(content=content)
 
 
-@api_view(['GET'])
-def product_all(request):
-    query=Product.objects.all()
-    data={}
-    if query:
-        data=ProductSerializer(query,many=True).data
-    return Response(data)
+class UpdateProductView(generics.UpdateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = CreateProductSerializer
 
-@api_view(['POST'])
-def add_product(request):
-    serializer=ProductSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        instance=serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response({"detail":"invalid"})
+    def perform_update(self, serializer):
+        content=serializer.validated_data.get('content') or None
+        if content is None:
+            content="Vide"
+        serializer.save(content=content)
+
+class DeleteProduct(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "pk"
