@@ -4,12 +4,22 @@ from app.models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    dsc=serializers.SerializerMethodField()
+
+    url=serializers.HyperlinkedIdentityField(view_name="detail",lookup_field="pk")
+    email=serializers.EmailField(write_only=True)
     class Meta:
         model=Product
-        fields=['id',"name","content","price","discount","dsc"]
-    def get_dsc(self,obj):
-        return obj.discount
+        fields=['id',"name","content","price","discount","url","email"]
+
+    def create(self, validated_data):
+        email=validated_data.pop('email')
+        print(email)
+        return Product.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name=validated_data.pop('email')
+        return super().update(instance,validated_data)
+
 
 class CreateProductSerializer(serializers.ModelSerializer):
 

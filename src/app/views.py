@@ -16,11 +16,11 @@ from rest_framework import generics,mixins
 from app.permissions import IsStaffPermission
 
 from app.permissions_mixins import EditorUserPermissionsMixin
-
-""" 
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+""" 
+
 
 class CreateApiView(generics.CreateAPIView):
     queryset = Product.objects.all()
@@ -98,9 +98,9 @@ class ProductMixinView(generics.GenericAPIView,
             content="Vide"
         serializer.save(content=content)
 """
-from rest_framework import viewsets,mixins
+from rest_framework import viewsets
 
-class ProductViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.UpdateModelMixin):
+class ProductViewSet(viewsets.ModelViewSet):
     """
     get -> list->Queryset
     get-> retrieve
