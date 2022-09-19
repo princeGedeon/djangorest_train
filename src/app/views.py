@@ -13,6 +13,11 @@ from app.serializers import ProductSerializer,CreateProductSerializer
 from  rest_framework import permissions,authentication
 from rest_framework import generics,mixins
 
+from app.permissions import IsStaffPermission
+
+from app.permissions_mixins import EditorUserPermissionsMixin
+
+
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -31,11 +36,11 @@ class ListProduct(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class ListCreateApiView(generics.ListCreateAPIView):
+class ListCreateApiView(generics.ListCreateAPIView,EditorUserPermissionsMixin):
     queryset = Product.objects.all()
     serializer_class = CreateProductSerializer
-
-    permission_classes = [permissions.DjangoModelPermissions]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsStaffPermission]
     def perform_create(self, serializer):
 
         content="C'est vide"
