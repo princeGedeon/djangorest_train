@@ -2,14 +2,14 @@ from rest_framework import serializers
 
 from app.models import Product
 
-from app.validators import validate_name
+from app.validators import validate_name,validate_unique_name
 
 
 class ProductSerializer(serializers.ModelSerializer):
 
     url=serializers.HyperlinkedIdentityField(view_name="detail",lookup_field="pk")
     email=serializers.EmailField(write_only=True)
-    name=serializers.CharField(validators=[validate_name])
+    name=serializers.CharField(validators=[validate_unique_name])
     class Meta:
         model=Product
         fields=['id',"name","content","price","discount","url","email"]
