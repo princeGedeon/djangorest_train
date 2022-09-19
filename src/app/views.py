@@ -10,6 +10,7 @@ from app.models import Product
 
 from app.serializers import ProductSerializer,CreateProductSerializer
 
+from  rest_framework import permissions,authentication
 from rest_framework import generics,mixins
 
 class DetailApiView(generics.RetrieveAPIView):
@@ -34,6 +35,7 @@ class ListCreateApiView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = CreateProductSerializer
 
+    permission_classes = [permissions.DjangoModelPermissions]
     def perform_create(self, serializer):
 
         content="C'est vide"
