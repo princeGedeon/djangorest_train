@@ -10,7 +10,7 @@ from app.models import Product
 
 from app.serializers import ProductSerializer,CreateProductSerializer
 
-from rest_framework import generics
+from rest_framework import generics,mixins
 
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
@@ -55,3 +55,42 @@ class DeleteProduct(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
+
+
+#Les mixins
+class ProductMixinView(generics.GenericAPIView,
+                       mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.CreateModelMixin,
+                       mixins.UpdateModelMixin,
+                       mixins.DestroyModelMixin):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        if pk is not None:
+            return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_update(self, serializer):
+        content=serializer.validated_data.get('content') or None
+        if content is None:
+            content="Vide"
+        serializer.save(content=content)
+
+
+
+
