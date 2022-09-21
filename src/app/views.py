@@ -31,10 +31,10 @@ class ListCreateApiView(generics.ListCreateAPIView,EditorUserPermissionsMixin):
 
         serializer.save(user=self.request.user)
 
-    def get_queryset(self,*args,**kwargs):
+    """def get_queryset(self,*args,**kwargs):
         qs=super().get_queryset(*args,**kwargs)
         user=self.request.user
-        return qs.filter(user=user)
+        return qs.filter(user=user)"""
 """ 
 
 
