@@ -19,6 +19,22 @@ from app.permissions_mixins import EditorUserPermissionsMixin
 class DetailApiView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class ListCreateApiView(generics.ListCreateAPIView,EditorUserPermissionsMixin):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    #authentication_classes = [authentication.TokenAuthentication]
+    #permission_classes = [IsStaffPermission]
+    def perform_create(self, serializer):
+
+
+
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self,*args,**kwargs):
+        qs=super().get_queryset(*args,**kwargs)
+        user=self.request.user
+        return qs.filter(user=user)
 """ 
 
 
@@ -36,16 +52,7 @@ class ListProduct(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class ListCreateApiView(generics.ListCreateAPIView,EditorUserPermissionsMixin):
-    queryset = Product.objects.all()
-    serializer_class = CreateProductSerializer
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [IsStaffPermission]
-    def perform_create(self, serializer):
 
-        content="C'est vide"
-
-        serializer.save(content=content)
 
 
 class UpdateProductView(generics.UpdateAPIView):

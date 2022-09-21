@@ -8,11 +8,12 @@ from app.validators import validate_name,validate_unique_name
 class ProductSerializer(serializers.ModelSerializer):
 
     url=serializers.HyperlinkedIdentityField(view_name="detail",lookup_field="pk")
-    email=serializers.EmailField(write_only=True)
+    #email=serializers.EmailField(write_only=True)
     name=serializers.CharField(validators=[validate_unique_name])
+    user_name=serializers.CharField(source="user",read_only=True)
     class Meta:
         model=Product
-        fields=['id',"name","content","price","discount","url","email"]
+        fields=['id',"name","content","price","discount","url","user_name"]
 
 
 
