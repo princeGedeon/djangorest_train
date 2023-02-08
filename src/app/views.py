@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -116,7 +118,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def save_product(self):
+        Product.objects.create(name=f"test{random.randint(1,100)}",content="blalalalsldldlksdkskl "*random.randint(1,10),price=random.randint(100,300))
 
-
+        print("save")
 
 
